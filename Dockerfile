@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.9
 
 RUN apk add --update --no-cache --verbose nfs-utils bash iproute2 && \
     rm -f /sbin/halt /sbin/poweroff /sbin/reboot && \
