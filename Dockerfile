@@ -1,6 +1,6 @@
 FROM alpine:3.8
 
-RUN apk add --update --no-cacje --verbose nfs-utils bash iproute2 && \
+RUN apk add --update --no-cache --verbose nfs-utils bash iproute2 && \
     rm -f /sbin/halt /sbin/poweroff /sbin/reboot && \
     mkdir -p /var/lib/nfs/rpc_pipefs && \
     mkdir -p /var/lib/nfs/v4recovery && \
