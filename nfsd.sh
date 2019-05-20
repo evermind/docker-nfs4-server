@@ -34,8 +34,10 @@ stop()
   exit
 }
 
-#echo "Starting rpcbind..."
-#/sbin/rpcbind -w
+# Normally only required if v3 will be used
+# But currently enabled to overcome an NFS bug around opening an IPv6 socket
+echo "Starting rpcbind..."
+/sbin/rpcbind -w
 
 echo "Starting rpc.nfsd in the background..."
 /usr/sbin/rpc.nfsd --debug 8 --no-udp --no-nfs-version 2 --no-nfs-version 3
@@ -49,21 +51,5 @@ echo "Exporting File System..."
 /usr/sbin/exportfs -rv
 /usr/sbin/exportfs
 
-echo "Starting rpc.mountd in the background..."
-/usr/sbin/rpc.mountd --debug all --no-udp --no-nfs-version 2 --no-nfs-version 3
-if [ $? != 0 ]; then
-	echo
-	echo "Unable to start rpc.mountd"
-	exit 1
-fi
-
-echo "NFS server is listening on port 2049."
-while true; do
-
-	if [ -z $(pidof rpc.mountd) ]; then
-		echo "rpc.mountd died - exiting"
-		break
-	fi
-
-	sleep 1
-done
+echo "Starting rpc.mountd ..."
+/usr/sbin/rpc.mountd --foreground --debug all --no-udp --no-nfs-version 2 --no-nfs-version 3
